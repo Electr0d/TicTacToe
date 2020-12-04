@@ -1,0 +1,14 @@
+{
+	"name": "tictactoe",
+	"version": "1.0.0",
+	"description": "A Tic-Tac-Toe game.",
+	"main": "src/index.js",
+	"scripts": {
+		"start": "electron ."
+	},
+	"author": "Hamza Alsarakbi",
+	"license": "ISC",
+	"devDependencies": {
+		"electron": "^11.0.3"
+	}
+}
