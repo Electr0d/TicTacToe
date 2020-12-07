@@ -4,9 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dark.css">
   <link rel="stylesheet" href="assets/css/windowbar.css">
   <link rel="stylesheet" href="assets/css/mainWindow.css">
-  <title>TicTacToe</title>
+  <title>Tic Tac Toe</title>
 </head>
 
 <body>
@@ -15,7 +17,7 @@
     <div id="drag-region">
       <div id="window-title">
         <img src="" height="20px">
-        <span style="padding-left: 10px;">Tashfeer</span>
+        <span style="padding-left: 10px;">Tic Tac Toe</span>
       </div>
 
       <div id="window-controls">
@@ -37,7 +39,46 @@
   <div style="height: 30px"></div>
 
 
+  <!-- app -->
+  <div class="app">
+    <div class="game">
+      <div class="score">0-0</div>
+      <div class="turns">
+        <div class="turn" id="x">X</div>
+        <div class="turn" id="o">O</div>
+      </div>
 
+
+      <div class="table">
+        <div class="column" id="column-1">
+          <div class="cell cell-1" id="cell-1"></div>
+          <div class="cell cell-1" id="cell-2"></div>
+          <div class="cell cell-1" id="cell-3"></div>
+        </div>
+        <div class="column" id="column-2">
+          <div class="cell cell-2" id="cell-1"></div>
+          <div class="cell cell-2" id="cell-2"></div>
+          <div class="cell cell-2" id="cell-3"></div>
+        </div>
+        <div class="column" id="column-3">
+          <div class="cell cell-3" id="cell-1"></div>
+          <div class="cell cell-3" id="cell-2"></div>
+          <div class="cell cell-3" id="cell-3"></div>
+        </div>
+
+      </div>
+      <div class="controls">
+        <button class="restart" onclick="startGame()">Restart</button>
+        <button class="restart" onclick="updateScore(true)">Reset Score</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="assets/js/addElement.js"></script>
+  <script src="assets/js/saveModules.js"></script>
+  <script src="assets/js/mainWindow.js"></script>
   <script src="assets/js/windowControls.js"></script>
 </body>
 

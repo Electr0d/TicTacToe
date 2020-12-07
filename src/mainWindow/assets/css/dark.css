@@ -1,0 +1,16 @@
+:root {
+  --primary-background: rgb(20, 20, 20);
+  --primary-hover: rgb(50, 50, 50);
+  --primary-color: rgb(220, 220, 220);
+  --primary-shadow: rgb(50, 50, 50);
+
+  --primary-accent: rgb(128, 101, 223);
+  --secondary-accent: rgb(40, 40, 40);
+
+
+  --table-cell-color: rgb(150, 150, 150);
+  --table-border-width: 4px;
+  --table-border-color: rgb(100, 100, 100);
+  
+  --popup-background: rgb(26, 26, 26)
+}
