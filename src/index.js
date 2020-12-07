@@ -8,7 +8,8 @@ app.on('ready', () => {
       enableRemoteModule: true
     },
     title: 'tictactoe',
-    frame: false
+    frame: false,
+    icon: path.join(__dirname, 'src/mainWindow/assets/img/icon.png')
   });
   window.loadURL(
     url.format({
