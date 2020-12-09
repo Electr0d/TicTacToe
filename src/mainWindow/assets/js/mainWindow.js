@@ -32,9 +32,11 @@ let winCombos = [
 ];
 
 function unload() {
+  // create new file if it doesn't exist
+  if(!fs.existsSync(configPath)) save();
+  
   // load config
   config = unpack();
-  console.log(config);
   let board = config.game[0].concat(config.game[1]).concat(config.game[2]);
   for(let i = 0; i < board.length; i++) {
     elements.table[i].textContent = board[i];
@@ -47,7 +49,9 @@ function unload() {
     }
   }
 
-
+  if(config.gameOver) {
+    setEndGameScreen('Game Over!', 'game-over');
+  }
 
   setInterval(autoSave, 1000);
 }
@@ -133,7 +137,7 @@ function checkWin() {
 
 function setEndGameScreen(text, result) {
   config.gameOver = true;
-  let popup = addPopup('win', 'Results', '').body;
+  let popup = addPopup('win', 'Game Results', '').body;
   let section = addSection('Results', 'win', popup);
   addElement('div', { class: 'popup-text', id: result + '-text' }, text,  section.body);
   addElement('button', { class: 'popup-button', id: result + '-button', onclick: 'restart()' }, 'Restart', section.body);
@@ -152,8 +156,13 @@ function updateScore(reset) {
   elements.score.textContent = config.score.x + '-' + config.score.o;
 }
 function settings() {
+  // add settings window
   let popup = addPopup('settings', 'Settings', { rotate: true, src: path.join(__dirname, '/assets/img/gear.png'), width: '22px'});
+
+  // add play mode section
   let section = addSection('Play Mode', 'play-mode', popup.body);
+
+  // add parameters
   addParameter(section.body, { radio: { text: 'PvP' }, name: 'play-mode', on: 'pvp'}, 'radio', 'pvp-mode', selectMode,  config.mode);
   for(let i = 0; i < config.difficulties.length; i++) {
     addParameter(section.body, { radio: { text: 'PvC - ' + stringify(config.difficulties[i]) }, name: 'play-mode', on: i}, 'radio', i + '-mode', selectMode,  config.mode);
@@ -161,9 +170,9 @@ function settings() {
 }
 
 function selectMode(e) {
+  // change to set mode
   let id = e.target.id;
-  let mode = id.replace('-mode-radio-input', '');
-  config.mode = mode;
+  config.mode = id.replace('-mode-radio-input', '');
   
   // make a move if user is switching into pvc and x's turn is up
   if(config.mode != 'pvp' && config.turn == 'x') aiMove();
@@ -180,10 +189,11 @@ function checkDraw() {
 }
 
 function stringify(text) {
+  // convert dashed text to spaced text
   let final = '';
   let splitted = text.split('-');
   for(let i = 0; i < splitted.length; i++) {
     final += ' ' + capitalize(splitted[i]);
   }
-  return final;
+  return final.replace(final.substring(0, 1), '');
 }
