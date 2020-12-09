@@ -5,21 +5,15 @@ const elements = {
     o: document.querySelector('.turn#o')
   },
   table: [
-    [
       document.querySelector('.cell-1#cell-1'),
-      document.querySelector('.cell-1#cell-2'),
-      document.querySelector('.cell-1#cell-3'),
-    ],
-    [
       document.querySelector('.cell-2#cell-1'),
-      document.querySelector('.cell-2#cell-2f'),
-      document.querySelector('.cell-2#cell-3'),
-    ],
-    [
       document.querySelector('.cell-3#cell-1'),
+      document.querySelector('.cell-1#cell-2'),
+      document.querySelector('.cell-2#cell-2'),
       document.querySelector('.cell-3#cell-2'),
-      document.querySelector('.cell-3#cell-3'),
-    ]
+      document.querySelector('.cell-1#cell-3'),
+      document.querySelector('.cell-2#cell-3'),
+      document.querySelector('.cell-3#cell-3')
   ],
   button: document.querySelector('button.button')
 }
@@ -56,27 +50,43 @@ function startGame() {
   let cells = document.querySelectorAll('.cell');
   for(let i = 0; i < cells.length; i++) {
     cells[i].textContent = '';
-    cells[i].setAttribute('onclick', 'placeTurn(this)');
+    cells[i].setAttribute('onclick', 'playerPlaceTurn(this)');
   }
+  
+  // reset avaible turns
+  config.avTurns = 9;
   
   // start with the set turn
   elements.turns[config.turn].classList.add('turn-up');
+  if(config.mode != 'pvp' && config.turn == 'x') aiMove();
+  config.gameOver = false;
 }
 startGame();
-
+function playerPlaceTurn(e) {
+  if(e.textContent == '') {
+    if(config.mode == 'pvp' || config.mode != 'pvp' && config.turn == 'o') {
+      placeTurn(e);
+      
+      // make turn if user selected ai
+      if(config.mode != 'pvp' && !config.gameOver) aiMove();
+    }
+  }
+}
 function placeTurn(e) {
   // make sure its empty
   if(e.textContent == '') {
     e.textContent = config.turn;
-
     // get the column and row, then append value to the correspoding game array
     let column = Number(e.classList[1].replace('cell-', '')) - 1;
     let row = Number(e.id.replace('cell-', '')) - 1;
     config.game[row][column] = config.turn;
+    config.avTurns--;
     
     // check for winner
     checkWin();
-
+    
+    // check for draw
+    checkDraw();
     // switch to other turn
     config.turn = config.turn == 'o' ? 'x' : 'o';
     turnMutate('toggle');
@@ -99,16 +109,15 @@ function checkWin() {
 }
 
 function setEndGameScreen(text, result) {
-  let overlay = addElement('div', { class: 'overlay' }, '', document.body);
-  let popup = addElement('div', { class: 'popup', id: result + '-popup' }, '', overlay);
-  addElement('div', { class: 'popup-header', id: result + '-header' }, 'Results:',  popup);
-  let popupBody = addElement('div', { class: 'popup-body', id: result + '-body' }, '',  popup);
-  addElement('div', { class: 'popup-text', id: result + '-text' }, text,  popupBody);
-  addElement('button', { class: 'popup-button', id: result + '-button', onclick: 'restart()' }, 'Restart', popupBody);
+  config.gameOver = true;
+  let popup = addPopup('win', 'Results', '').body;
+  let section = addSection('Results', 'win', popup);
+  addElement('div', { class: 'popup-text', id: result + '-text' }, text,  section.body);
+  addElement('button', { class: 'popup-button', id: result + '-button', onclick: 'restart()' }, 'Restart', section.body);
 }
 
 function restart() {
-  document.body.removeChild(document.querySelector(".overlay"));
+  destroyPopup('win')
   startGame();
 }
 
@@ -118,4 +127,40 @@ function updateScore(reset) {
     config.score.x = 0;
   }
   elements.score.textContent = config.score.x + '-' + config.score.o;
+}
+function settings() {
+  let popup = addPopup('settings', 'Settings', { rotate: true, src: path.join(__dirname, '/assets/img/gear.png'), width: '22px'});
+  let section = addSection('Play Mode', 'play-mode', popup.body);
+  addParameter(section.body, { radio: { text: 'PvP' }, name: 'play-mode', on: 'pvp'}, 'radio', 'pvp-mode', selectMode,  config.mode);
+  for(let i = 0; i < config.difficulties.length; i++) {
+    addParameter(section.body, { radio: { text: 'PvC - ' + stringify(config.difficulties[i]) }, name: 'play-mode', on: i}, 'radio', i + '-mode', selectMode,  config.mode);
+  }
+}
+
+function selectMode(e) {
+  let id = e.target.id;
+  let mode = id.replace('-mode-radio-input', '');
+  config.mode = mode;
+  
+  // make a move if user is switching into pvc and x's turn is up
+  if(config.mode != 'pvp' && config.turn == 'x') aiMove();
+}
+
+function capitalize(text) {
+  return text.replace(text.substring(0, 1), text.substring(0, 1).toUpperCase());
+}
+
+function checkDraw() {
+  if(config.avTurns < 1 && !config.gameOver) {
+    setEndGameScreen('Tie!', 'tie');
+  }
+}
+
+function stringify(text) {
+  let final = '';
+  let splitted = text.split('-');
+  for(let i = 0; i < splitted.length; i++) {
+    final += ' ' + capitalize(splitted[i]);
+  }
+  return final;
 }

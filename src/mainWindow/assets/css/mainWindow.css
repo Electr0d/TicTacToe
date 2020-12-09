@@ -10,6 +10,9 @@
 
 body {
   background: var(--primary-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -95,55 +98,4 @@ button:active {
 }
 .clickable {
   cursor: pointer;
-}
-
-
-.overlay {
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  position: fixed;
-  backdrop-filter: brightness(0.6);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup {
-  min-width: 300px;
-  min-height: 100px;
-  border-radius: 20px;
-  background: var(--popup-background);
-  box-shadow: -2px 2px 5px var(--primary-shadow);
-  animation: popup-draw-in 0.2s ease-out;
-}
-.popup-header {
-  width: 100%;
-  padding: 10px;
-  font-size: 24px;
-  border-bottom: 2px solid var(--primary-accent);
-  backdrop-filter: brightness(0.8);
-  color: var(--primary-accent);
-}
-.popup-body {
-  padding: 20px;
-}
-.popup-button {
-  margin-top: 20px;
-  width: 100%;
-}
-@keyframes popup-draw-in {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-}
-.controls {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-}
-.controls button {
-  margin: 0 10px;
 }
