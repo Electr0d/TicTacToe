@@ -31,6 +31,30 @@ let winCombos = [
   [2, 4, 6]
 ];
 
+function unload() {
+  // load config
+  config = unpack();
+  console.log(config);
+  let board = config.game[0].concat(config.game[1]).concat(config.game[2]);
+  for(let i = 0; i < board.length; i++) {
+    elements.table[i].textContent = board[i];
+  }
+
+  if(config.turn == 'x') {
+    turnMutate('toggle');
+    if(config.mode != 'pvp') {
+      aiMove();
+    }
+  }
+
+
+
+  setInterval(autoSave, 1000);
+}
+startGame();
+unload();
+
+
 
 function turnMutate(action) {
   // change both turns according to action
@@ -61,7 +85,6 @@ function startGame() {
   if(config.mode != 'pvp' && config.turn == 'x') aiMove();
   config.gameOver = false;
 }
-startGame();
 function playerPlaceTurn(e) {
   if(e.textContent == '') {
     if(config.mode == 'pvp' || config.mode != 'pvp' && config.turn == 'o') {

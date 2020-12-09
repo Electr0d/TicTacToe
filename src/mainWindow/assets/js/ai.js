@@ -58,7 +58,7 @@ function aiMove() {
 
     }
     // wait a random amount of time
-  }, clamp(Math.round(Math.random() * 1000), 300, 1000));
+  }, clamp(Math.round(Math.random() * 1000), 400, 1000));
 }
 
 
