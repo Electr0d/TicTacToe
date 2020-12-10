@@ -40,6 +40,8 @@ function aiMove() {
 
           } else if(config.avTurns == 8) {
             let strat = [4, 0, 2, 6, 8];
+            
+            // place a turn in the designated spot if it is available
             for(let i = 0; i < strat.length; i++) {
               let e = elements.table[strat[i]];
               if(e.textContent == '') {

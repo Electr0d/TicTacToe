@@ -104,3 +104,19 @@ button:active {
   margin-top: 20px;
   width: 100%;
 }
+.streak {
+  width: 10px;
+  height: 00%;
+  background: var(--primary-accent);
+  border-radius: 10px;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  align-self: flex-start;
+  opacity: 0;
+}
+
+.streak-on {
+  opacity: 1;
+  height: 100%;
+  transition: 0.5s;
+}

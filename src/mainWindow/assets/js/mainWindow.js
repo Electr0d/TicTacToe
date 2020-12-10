@@ -1,5 +1,6 @@
 const elements = {
   score: document.querySelector('.score'),
+  streak: document.querySelector('.streak'),
   turns: {
     x: document.querySelector('.turn#x'),
     o: document.querySelector('.turn#o')
@@ -80,6 +81,8 @@ function startGame() {
     cells[i].textContent = '';
     cells[i].setAttribute('onclick', 'playerPlaceTurn(this)');
   }
+  elements.streak.style = '';
+  elements.streak.classList.remove('streak-on');
   
   // reset avaible turns
   config.avTurns = 9;
@@ -100,8 +103,8 @@ function playerPlaceTurn(e) {
   }
 }
 function placeTurn(e) {
-  // make sure its empty
-  if(e.textContent == '') {
+  // make sure its empty and game isn't over
+  if(e.textContent == '' && !config.gameOver) {
     e.textContent = config.turn;
     // get the column and row, then append value to the correspoding game array
     let column = Number(e.classList[1].replace('cell-', '')) - 1;
@@ -128,9 +131,27 @@ function checkWin() {
   for(let i = 0; i < winCombos.length; i++) {
     // check if the turn matches all 3 positions of each win combo
     if(board[winCombos[i][0]] == config.turn && board[winCombos[i][1]] == config.turn && board[winCombos[i][2]] == config.turn) {
-      setEndGameScreen('Player "' + config.turn.toUpperCase() + '" is the winner! 🎉', 'win');
+      config.gameOver = true;
       config.score[config.turn]++;
       updateScore();
+      
+      // win animation
+      // horizontal
+      if(i < 3) {
+        elements.streak.style = 'transform: rotate(-90deg) translateX(-' + (i * 100 + 60) +'px); transition: 0.2s';
+        
+      } else if(i < 6) {
+        // vertical
+        elements.streak.style = 'transform: translateX(' + ((i - 3) * 108 + 56) +'px);';
+        
+      } else {
+        // diagonal line
+        elements.streak.style = 'transform: translateX(' + Math.abs(i - 6) * 324 + 'px) rotate(' + (2 * i - 13) * 45 + 'deg) scaleY(1.4);';
+      }
+      elements.streak.classList.add('streak-on');
+
+
+      break;
     }
   }
 }
