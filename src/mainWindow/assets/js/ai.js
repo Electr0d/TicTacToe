@@ -74,12 +74,15 @@ function makeMove(target) {
     let common = 0;
     // check if player made more than 2 plays
     for (let v = 0; v < winCombos[i].length; v++) {
+      console.log(board[winCombos[i][v]]);
+      console.log(target, board[winCombos[i][v]] == target);
       if (board[winCombos[i][v]] == target) common++;
     }
     if (common > 1) {
       // place a turn in 3rd spot
       for (let v = 0; v < winCombos[i].length; v++) {
         let e = elements.table[winCombos[i][v]];
+        console.log(e);
 
         // add if element's empty
         if (e.textContent == '' && !placed) {

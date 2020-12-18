@@ -40,7 +40,7 @@ function unload() {
   config = unpack();
   let board = config.game[0].concat(config.game[1]).concat(config.game[2]);
   for(let i = 0; i < board.length; i++) {
-    elements.table[i].textContent = board[i];
+    if(board[i] != '') addElement('div', { class: 'turn-e', id:'turn-' + board[i] }, board[i], elements.table[i]);
   }
 
   if(config.turn == 'x') {
@@ -105,7 +105,7 @@ function playerPlaceTurn(e) {
 function placeTurn(e) {
   // make sure its empty and game isn't over
   if(e.textContent == '' && !config.gameOver) {
-    e.textContent = config.turn;
+    addElement('div', { class: 'turn-e', id: 'turn-' + config.turn }, config.turn, e);
     // get the column and row, then append value to the correspoding game array
     let column = Number(e.classList[1].replace('cell-', '')) - 1;
     let row = Number(e.id.replace('cell-', '')) - 1;
